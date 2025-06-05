@@ -1,0 +1,36 @@
+
+
+.body{
+  border: 1px solid black;
+  margin: 1rem;
+  padding: 2rem 2rem;
+  text-align: left;
+}
+
+.group1{
+  display: inline-block;
+  border: solid #5b6dcd 1px;
+  padding: 5px;
+  vertical-align: middle;
+  margin: 0% 5% 0% 0%;
+  background-color: rgba(0, 0, 0, 0.45);
+  min-height: 2000px;
+  min-width: 400px;
+  
+}
+
+.searchbar{
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 10%;
+}
+
+.playlist{
+  display: inline-block;
+  border: 1px solid red;
+  padding: 1rem 1rem;
+  vertical-align: top;
+  min-height: 2000px;
+  min-width: 370px;
+  background-color: rgba(0, 0, 0, 0.45);
+}
