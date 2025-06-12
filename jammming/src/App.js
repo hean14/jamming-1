@@ -27,29 +27,12 @@ function App() {
       .then(data => setAccessToken(data.access_token)) // this line is where we give access to spotify
   }, [])
 
-  const [song, setSong] =useState([
-    {
-      id: 1,
-      name: 'Till I Collapse',
-      artist: 'eminem',
-    },
-    {
-      id:2,
-      name: 'kryptonite',
-      artist: 'three doors down',
-    },
-    {
-      id:3,
-      name: 'Johnny Ps Caddy',
-      artist: 'Benny the Butcher, J. Cole',
-    }
-  ])
-
-  const [list, setList] = useState([]); // will be used to for createing the playlist?
-  const [name, setName] = useState('');
+  const [song, setSong] =useState([])// used to show the returned for searched songs
+  const [list, setList] = useState([]); // used to for createing the playlist
+  const [playlistName, setPlaylistName] = useState('');// playlist name
 
   const handleNameChange = (event) =>{
-    setName(event.target.value);
+    setPlaylistName(event.target.value);
   }
 
   const addSong = (songToAdd) =>{
@@ -62,17 +45,42 @@ function App() {
     );
   }
 
+  async function search(terms) {
+    console.log('Search for ' + terms);
+
+    // get request using serch for artist id
+    var searchParameters = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + accessToken
+      }
+    }
+    var artistID = await fetch('https://api.spotify.com/v1/search?q=' + terms + '&type=artist', searchParameters)
+    .then(response => response.json())
+    .then(data => {return data.artists.items[0].id})
+    //with artist id grab songs or albums
+    var tracks = await fetch('https://api.spotify.com/v1/artists/' + artistID + '/top-tracks?market=US', searchParameters)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data.tracks)
+      setSong(data.tracks);
+    });
+    
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <div className={styles.searchbar}>
-          <SearchBar accessToken={accessToken}/>
+          <SearchBar search={search}/>
         </div>
         <div className={styles.body}>
           <div className={styles.group1}>
             <h1>Results</h1>
           {song.map((songs) => (
-            <TrackList key={songs.id} songs={songs} addSong={addSong} />
+            <TrackList songsID={songs.id} songs={songs.name} artists={songs.artists} addSong={addSong} />
+            
           ))}
         </div>
         <div className={styles.playlist}>
@@ -80,7 +88,7 @@ function App() {
             type='text'
             aria-label='playlist name'
             placeholder='playlist name'
-            value={name}
+            value={playlistName}
             onChange={handleNameChange}
             />
           {list.map((lists) =>(

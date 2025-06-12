@@ -7,22 +7,24 @@ function SearchBar (props) {
 
     const handleSubmit = (e) =>{ //will be used for submitting the search term??????
         e.preventDefault();
+        props.search(term);
     }
 
-    async function search() {
-        console.log('Search for ' + term);
+    const handleTermChange = (e) =>{
+        setTerm(e.target.value);
     }
 
     return(
-        <form onChange={handleSubmit}>
+        <form  onSubmit={handleSubmit}>
             <label htmlFor="searchBar"/>
             <input 
             id='searchBar' 
+            type='text'
             value={term} 
-            onChange={(e) => setTerm(e.target.value)}
+            onChange={handleTermChange}
             placeholder="Search for artist, song, or album"
             />
-            <button type="submit" onClick={search}>Submit</button>
+            <input type='submit' value='add' />
         </form>
     )
 }

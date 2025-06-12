@@ -6,32 +6,63 @@ import { generateId } from "../utilities";
 
 function TrackList (props){
 
-    const { songs, addSong } = props;
+    const { songs, addSong, artists, songsID } = props;
     
 
     const handleAddClick = () =>{
+        
+        let artistName = artists[0].name;
+        if(artists.length > 1){
+        artistName = artistName + ' ft'
+        }
+        if(artists.length > 1){
+            for(let i = 1; i<artists.length;){
+                artistName = artistName + ' ' + artists[i];
+            }
+        }
+        
         const listSong = {
             id: generateId(),
-            songId: songs.id,
-            name: songs.name,
-            artist: songs.artist
+            songId: songsID,
+            name: songs,
+            artist: artistName
         }
         addSong(listSong);
     }
 
-    return(
+    
+
+    if(artists.length > 1){
+        
+        return( 
         <div className={styles.card}>
             <div className={styles.detailsWrapper}>
-                <h3>{songs.name}</h3>
-                <p className={styles.details}>{songs.artist}</p>
+                <h3>{songs}</h3>
+                {artists.map((artist) => 
+                <ul className={styles.details}>|{artist.name}</ul>
+                )} 
                 <button
                 aria-label="add song"
                 className="add-button"
                 onClick={handleAddClick}/>
             </div>
         </div>
-    )    
+    )}
 
+    else{
+    return( 
+        <div className={styles.card}>
+            <div className={styles.detailsWrapper}>
+                <h3>{songs}</h3>
+                <p className={styles.details}>{artists[0].name}</p> 
+                <button
+                aria-label="add song"
+                className="add-button"
+                onClick={handleAddClick}/>
+            </div>
+        </div>
+    )}    
+    //might need to change the variables in the return but rn beleive that these variables are just for the addclick
 }
 
 export default TrackList;
